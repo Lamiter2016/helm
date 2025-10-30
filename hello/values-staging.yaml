@@ -1,0 +1,60 @@
+identity_key: kajnsdqokwjdlmansdkjqnhwdk
+image: nginxdemos/hello:latest
+port: 8080
+targetPort: 8080
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 10
+  targetMemoryUtilizationPercentage: 30
+livenessProbe:
+  enabled: true
+  path: /healthz
+  port: port
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  path: /ready
+  port: port
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+networkPolicy:
+  enabled: true
+
+  ingress:
+    enabled: true
+    from:
+      - podSelector: {}
+      # - namespaceSelector:
+      #     matchLabels:
+      #       kubernetes.io/metadata.name: default
+    ports:
+      - port: 80
+        protocol: TCP
+      - port: 443
+        protocol: TCP
+  egress:
+    enabled: true
+    to:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+    ports:
+      - port: 80
+        protocol: TCP
+      - port: 443
+        protocol: TCP
+version: {"service" : "","version": "1.2.3","branch": "develop","brand": "brandA,brandB","updated_at": "2025-10-30T03:12:00Z"}
