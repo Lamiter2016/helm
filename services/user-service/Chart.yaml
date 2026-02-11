@@ -1,0 +1,4 @@
+dependencies:
+  - name: service-lib
+    version: 1.0.0
+    repository: "file://../../library/service-lib"

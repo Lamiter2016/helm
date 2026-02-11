@@ -1,29 +1,15 @@
-{{- define "service-lib.ingress" -}}
-{{- if .Values.ingress.enabled }}
+{{- define "service-lib.networkpolicy" -}}
+{{- if .Values.networkPolicy.enabled }}
 apiVersion: networking.k8s.io/v1
-kind: Ingress
+kind: NetworkPolicy
 metadata:
   name: {{ include "service-lib.fullname" . }}
-  annotations:
-    {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
-  rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host }}
-      http:
-        paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ include "service-lib.fullname" $ }}
-                port:
-                  number: {{ $.Values.service.port }}
-          {{- end }}
-    {{- end }}
-  tls:
-    {{- toYaml .Values.ingress.tls | nindent 4 }}
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "service-lib.name" . }}
+  policyTypes:
+    - Ingress
+    - Egress
 {{- end }}
 {{- end }}
