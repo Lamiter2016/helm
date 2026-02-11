@@ -1,0 +1,5 @@
+apiVersion: v2
+name: service-lib
+description: Enterprise reusable Helm library for microservices
+type: library
+version: 1.0.0
